@@ -26,25 +26,27 @@ shinyServer(function(input, output) {
     
     sliderValues <- reactive({
         df <- data %>%
-            mutate(Treatment        = factor(Treatment, levels = c("Baseline", "Usual Care", "Yoga", "Massage"))) %>%
+            mutate(Treatment         = factor(Treatment, levels = c("Baseline", "Usual Care", "Yoga", "Massage"))) %>%
             filter(`Participant ID` == unique(`Participant ID`)[as.numeric(input$dataset)])
         
         summary <- df %>%
             group_by(Date, Treatment) %>% 
             filter(Treatment != "Baseline") %>%
-            summarise(Steps = sum(Steps))
+            summarise(Steps   = sum(Steps))
         
-        fit <- gls(Steps ~ Treatment, correlation = corAR1(form=~1),
-                   subset = which(Treatment != "Baseline"),
-                   control = list(singular.ok = TRUE),
-                   na.action = na.omit, data = summary)
+        fit <- gls(model      = Steps ~ Treatment, 
+                   correlation = corAR1(form=~1),
+                   subset     = which(Treatment != "Baseline"),
+                   control    = list(singular.ok = TRUE),
+                   na.action  = na.omit, 
+                   data       = summary)
         
             data.frame(
-                Output = c("Total steps averaged during Usual Care",
-                           "Total steps averaged increased during Yoga",
-                           "Total steps averaged increased during Massage"),
-                Estimate = c(round(summary(fit)$tTable[, 1], 2)),
-                pvalue     = c("-", round(summary(fit)$tTable[-1, 4], 2)))
+                Output        = c("Total steps averaged during Usual Care",
+                                  "Total steps averaged increased during Yoga",
+                                  "Total steps averaged increased during Massage"),
+                Estimate      = c(round(summary(fit)$tTable[, 1], 2)),
+                `p-value`     = c("-", round(summary(fit)$tTable[-1, 4], 2)))
     })
     
     
@@ -56,8 +58,8 @@ shinyServer(function(input, output) {
          df %>%
             group_by(Date, Treatment) %>% 
             filter(Treatment != "Baseline") %>%
-            summarise(Steps = sum(Steps_impute), HR = median(`Heart Rate`, na.rm = T)) %>%
-            mutate(group = 1)
+            summarise(Steps   = sum(Steps_impute), HR = median(`Heart Rate`, na.rm = T)) %>%
+            mutate(group      = 1)
         
 
     })

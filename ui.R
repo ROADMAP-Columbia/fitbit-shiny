@@ -47,7 +47,7 @@ shinyUI(fluidPage(
             h5("Number of steps per day"),
             plotlyOutput("plot"), 
             
-            h5("Distribution of mean total number of steps per day by treatment"),
+            h5("Distribution of total number of steps per day by treatment"),
             plotlyOutput("plot1"), 
             
             h5("Distribution of median heart rate by treatment"),
