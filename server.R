@@ -19,14 +19,13 @@ library(plotly)
 
 
 #list all the files
-temp = list.files(pattern = "CLBP*")
-df <- read_excel("Data/Imputed_Fitbit_by_Minute.xlsx", col_names = T)
+data <- read_excel("Data/Imputed_Fitbit_by_Minute.xlsx", col_names = T)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
     
     sliderValues <- reactive({
-        df <- read_excel("Data/Imputed_Fitbit_by_Minute.xlsx", col_names = T) %>%
+        df <- data %>%
             mutate(Treatment        = factor(Treatment, levels = c("Baseline", "Usual Care", "Yoga", "Massage"))) %>%
             filter(`Participant ID` == unique(`Participant ID`)[as.numeric(input$dataset)])
         
@@ -50,7 +49,7 @@ shinyServer(function(input, output) {
     
     
     summ <- reactive({
-        df <- read_excel("Data/Imputed_Fitbit_by_Minute.xlsx", col_names = T) %>%
+        df <- data %>%
             mutate(Treatment        = factor(Treatment, levels = c("Baseline", "Usual Care", "Yoga", "Massage"))) %>%
             filter(`Participant ID` == unique(`Participant ID`)[as.numeric(input$dataset)])
         
@@ -63,7 +62,7 @@ shinyServer(function(input, output) {
     })
     
     summ1 <- reactive({
-        df <- read_excel("Data/Imputed_Fitbit_by_Minute.xlsx", col_names = T) %>%
+        df <- data %>%
             mutate(Treatment        = factor(Treatment, levels = c("Baseline", "Usual Care", "Yoga", "Massage"))) %>%
             filter(`Participant ID` == unique(`Participant ID`)[as.numeric(input$dataset)])
         
@@ -100,6 +99,15 @@ shinyServer(function(input, output) {
     })
     
     output$plot1 <- renderPlotly({
+        print(
+            ggplotly(
+                ggplot(data = summ(), aes(x = Treatment, y = Steps, fill = Treatment)) + 
+                    geom_boxplot() +
+                    theme_gdocs()))
+        
+    })
+    
+    output$plot2 <- renderPlotly({
         print(
             ggplotly(
                 ggplot(data = summ1(), aes(x = Treatment, y = Steps, fill = Treatment)) + 
