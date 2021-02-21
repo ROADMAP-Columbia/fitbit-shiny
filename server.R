@@ -19,14 +19,13 @@ library(plotly)
 
 
 #list all the files
-temp = list.files(pattern = "CLBP*")
-df <- read_excel("Data/Imputed_Fitbit_by_Minute.xlsx", col_names = T)
+data <- read_excel("Data/Imputed_Fitbit_by_Minute.xlsx", col_names = T)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
     
     sliderValues <- reactive({
-        df <- read_excel("Data/Imputed_Fitbit_by_Minute.xlsx", col_names = T) %>%
+        df <- data %>%
             mutate(Treatment        = factor(Treatment, levels = c("Baseline", "Usual Care", "Yoga", "Massage"))) %>%
             filter(`Participant ID` == unique(`Participant ID`)[as.numeric(input$dataset)])
         
@@ -50,20 +49,21 @@ shinyServer(function(input, output) {
     
     
     summ <- reactive({
-        df <- read_excel("Data/Imputed_Fitbit_by_Minute.xlsx", col_names = T) %>%
+        df <- data %>%
             mutate(Treatment        = factor(Treatment, levels = c("Baseline", "Usual Care", "Yoga", "Massage"))) %>%
             filter(`Participant ID` == unique(`Participant ID`)[as.numeric(input$dataset)])
         
          df %>%
             group_by(Date, Treatment) %>% 
             filter(Treatment != "Baseline") %>%
-            summarise(Steps = sum(Steps_impute))
+            summarise(Steps = sum(Steps_impute)) %>%
+            mutate(group = 1)
         
 
     })
     
     summ1 <- reactive({
-        df <- read_excel("Data/Imputed_Fitbit_by_Minute.xlsx", col_names = T) %>%
+        df <- data %>%
             mutate(Treatment        = factor(Treatment, levels = c("Baseline", "Usual Care", "Yoga", "Massage"))) %>%
             filter(`Participant ID` == unique(`Participant ID`)[as.numeric(input$dataset)])
         
@@ -92,14 +92,23 @@ shinyServer(function(input, output) {
     output$plot <- renderPlotly({
         print(
             ggplotly(
-                ggplot(data = summ(), aes(x = Date, y = Steps, color = Treatment)) + 
-                    geom_path(aes(group = 1)) +
+                ggplot(data = summ(), aes(x = Date, y = Steps, group = factor(group))) + 
                     geom_point() +
+                    geom_path(aes(color = Treatment)) +
                     theme_gdocs()))
         
     })
     
     output$plot1 <- renderPlotly({
+        print(
+            ggplotly(
+                ggplot(data = summ(), aes(x = Treatment, y = Steps, fill = Treatment)) + 
+                    geom_boxplot() +
+                    theme_gdocs()))
+        
+    })
+    
+    output$plot2 <- renderPlotly({
         print(
             ggplotly(
                 ggplot(data = summ1(), aes(x = Treatment, y = Steps, fill = Treatment)) + 
