@@ -80,9 +80,9 @@ shinyServer(function(input, output) {
     output$plot <- renderPlotly({
         print(
             ggplotly(
-                ggplot(data = summ(), aes(x = Date, y = Steps, group = factor(group))) + 
+                ggplot(data = summ(), aes(x = Date, y = Steps)) + 
                     geom_point() +
-                    geom_path(aes(color = Treatment)) +
+                    geom_line(aes(color = Treatment, group = 1)) +
                     theme_gdocs()))
         
     })
