@@ -48,7 +48,10 @@ shinyUI(fluidPage(
             plotlyOutput("plot"), 
             
             h5("Mean number of steps per day by Treatment"),
-            plotlyOutput("plot1")
+            plotlyOutput("plot1"), 
+            
+            h5("Mean number of steps per day by Treatment"),
+            plotlyOutput("plot2")
             
         )
     )
