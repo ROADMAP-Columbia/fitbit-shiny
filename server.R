@@ -51,29 +51,15 @@ shinyServer(function(input, output) {
     summ <- reactive({
         df <- data %>%
             mutate(Treatment        = factor(Treatment, levels = c("Baseline", "Usual Care", "Yoga", "Massage"))) %>%
-            filter(`Participant ID` == unique(`Participant ID`)[as.numeric(input$dataset)])
+            filter(`Participant ID` == unique(`Participant ID`)[as.numeric(input$dataset)]) 
         
          df %>%
             group_by(Date, Treatment) %>% 
             filter(Treatment != "Baseline") %>%
-            summarise(Steps = sum(Steps_impute)) %>%
+            summarise(Steps = sum(Steps_impute), HR = median(`Heart Rate`, na.rm = T)) %>%
             mutate(group = 1)
         
 
-    })
-    
-    summ1 <- reactive({
-        df <- data %>%
-            mutate(Treatment        = factor(Treatment, levels = c("Baseline", "Usual Care", "Yoga", "Massage"))) %>%
-            filter(`Participant ID` == unique(`Participant ID`)[as.numeric(input$dataset)])
-        
-        df %>%
-            group_by(Date, Treatment) %>% 
-            filter(Treatment != "Baseline") %>%
-            summarise(Steps = sum(Steps_impute)) %>%
-            group_by(Treatment) %>% 
-            summarise(Steps = mean(Steps))
-        
     })
     
     
@@ -111,8 +97,8 @@ shinyServer(function(input, output) {
     output$plot2 <- renderPlotly({
         print(
             ggplotly(
-                ggplot(data = summ1(), aes(x = Treatment, y = Steps, fill = Treatment)) + 
-                    geom_bar(stat="identity") +
+                ggplot(data = summ(), aes(x = Treatment, y = HR, fill = Treatment)) + 
+                    geom_boxplot() +
                     theme_gdocs()))
         
     })

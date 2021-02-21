@@ -32,9 +32,9 @@ shinyUI(fluidPage(
                                                                     "Patient 3" = "3")),
             
             # Copy the line below to make a set of radio buttons
-            radioButtons("impute", label = h5("Use imputed data?"),
-                         choices = list("Yes" = 1, "No" = 0), 
-                         selected = 0)
+            radioButtons('impute', label = h5('Use imputed data?'),
+                         choices = list("Yes" = "1", "No" = "0"), 
+                         selected = "0")
             
             
         ),
@@ -47,10 +47,10 @@ shinyUI(fluidPage(
             h5("Number of steps per day"),
             plotlyOutput("plot"), 
             
-            h5("Mean number of steps per day by Treatment"),
+            h5("Distribution of mean total number of steps per day by treatment"),
             plotlyOutput("plot1"), 
             
-            h5("Mean number of steps per day by Treatment"),
+            h5("Distribution of median heart rate by treatment"),
             plotlyOutput("plot2")
             
         )
