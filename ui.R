@@ -27,9 +27,12 @@ shinyUI(fluidPage(
     # Sidebar with a slider input for number of bins
     sidebarLayout(
         sidebarPanel(
-            selectInput('dataset', h5('Choose a dataset:'), choices = c("Patient 1" = "1",
-                                                                    "Patient 2" = "2", 
-                                                                    "Patient 3" = "3")),
+            selectInput('dataset', h5('Choose a dataset:'), 
+                        choices = c("Patient 1" = "1",
+                                    "Patient 2" = "2", 
+                                    "Patient 3" = "3", 
+                                    "Patient 4" = "4", 
+                                    "Patient 5" = "5")),
             
             # Copy the line below to make a set of radio buttons
             radioButtons('impute', label = h5('Use imputed data?'),
