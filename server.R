@@ -32,14 +32,14 @@ shinyServer(function(input, output) {
         summary <- df %>%
             group_by(Date, Treatment) %>% 
             filter(Treatment != "Baseline") %>%
-            summarise(Steps   = sum(Steps))
+            summarise(Steps   = sum(Steps), .groups = 'drop')
         
-        fit <- gls(model      = Steps ~ Treatment, 
+        fit <- gls(model       = Steps ~ Treatment, 
                    correlation = corAR1(form=~1),
-                   subset     = which(Treatment != "Baseline"),
-                   control    = list(singular.ok = TRUE),
-                   na.action  = na.omit, 
-                   data       = summary)
+                   subset      = which(Treatment != "Baseline"),
+                   control     = list(singular.ok = TRUE),
+                   na.action   = na.omit, 
+                   data        = summary)
         
             data.frame(
                 Output        = c("Total steps averaged during Usual Care",
@@ -58,7 +58,9 @@ shinyServer(function(input, output) {
          df %>%
             group_by(Date, Treatment) %>% 
             filter(Treatment != "Baseline") %>%
-            summarise(Steps   = sum(Steps_impute), HR = median(`Heart Rate`, na.rm = T)) %>%
+            summarise(Steps   = sum(Steps_impute), 
+                      HR      = median(`Heart Rate`, na.rm = T),
+                      .groups = 'drop') %>%
             mutate(group      = 1)
         
 
