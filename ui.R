@@ -45,7 +45,9 @@ shinyUI(fluidPage(
                                     "Patient 15" = "15", 
                                     "Patient 16" = "16",
                                     "Patient 17" = "17", 
-                                    "Patient 18" = "18")),
+                                    "Patient 18" = "18",
+                                    "Patient 19" = "19", 
+                                    "Patient 20" = "20")),
             
             # Copy the line below to make a set of radio buttons
             radioButtons('impute', label = h5('Use imputed data?'),
