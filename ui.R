@@ -62,6 +62,9 @@ shinyUI(fluidPage(
             h5("AR(1) model analysis with treatment effects"),
             dataTableOutput("values"),
             
+            h5("Forest plot of treatment comparison"),
+            plotlyOutput("fp"), 
+            
             h5("Number of steps per day"),
             plotlyOutput("plot"), 
             

@@ -49,6 +49,39 @@ shinyServer(function(input, output) {
                 `p-value`     = c("-", round(summary(fit)$tTable[-1, 4], 2)))
     })
     
+    fp <- reactive({
+        df <- data %>%
+            mutate(Treatment         = factor(Treatment, levels = c("Baseline", "Usual Care", "Yoga", "Massage"))) %>%
+            filter(`Participant ID` == unique(`Participant ID`)[as.numeric(input$dataset)])
+        
+        summary <- df %>%
+            group_by(Date, Treatment) %>% 
+            filter(Treatment != "Baseline") %>%
+            summarise(Steps   = sum(Steps), .groups = 'drop')
+        
+        fit1 <- gls(Steps ~ Treatment, correlation = corAR1(form=~1), data = summary,
+                    control = list(singular.ok = TRUE), na.action = na.omit, 
+                    subset = which(Treatment != "Baseline"))
+        
+        df <- df %>%
+            mutate(Treatment = factor(Treatment, levels = c("Baseline", "Yoga", "Massage", "Usual Care")))
+        
+        summary <- df %>%
+            group_by(Date, Treatment) %>% 
+            filter(Treatment != "Baseline") %>%
+            summarise(Steps   = sum(Steps), .groups = 'drop')
+        
+        fit2 <- gls(Steps ~ Treatment, correlation = corAR1(form=~1), data = summary,
+                    control = list(singular.ok = TRUE), na.action = na.omit, 
+                    subset = which(Treatment != "Baseline"))
+        
+        
+        fp <- data.frame(label = c("Yoga vs Usual Care", "Massage vs Usual Care", "Massage vs Yoga"), 
+                         mean  = c(intervals(fit1)$coef[2, 2],  intervals(fit1)$coef[3, 2],  intervals(fit2)$coef[2, 2]), 
+                         lower = c(intervals(fit1)$coef[2, 1], intervals(fit1)$coef[3, 1], intervals(fit2)$coef[2, 1]), 
+                         upper = c(intervals(fit1)$coef[2, 3], intervals(fit1)$coef[3, 3], intervals(fit2)$coef[2, 3]))
+        
+    })
     
     summ <- reactive({
         df <- data %>%
@@ -78,6 +111,21 @@ shinyServer(function(input, output) {
             "}"),
         dom = 'Bfrtip',
         buttons = c('copy', 'csv', 'excel', 'pdf', 'print')), rownames= FALSE)
+    
+    output$fp <- renderPlotly({
+        print(
+            ggplotly(
+                ggplot(data = fp(), aes(x     = label, 
+                                        y     = mean, 
+                                        ymin  = lower, 
+                                        ymax  = upper)) +
+                    geom_pointrange() + 
+                    geom_hline(yintercept = 0, lty = 2) +  # add a dotted line at x=1 after flip
+                    coord_flip() + # flip coordinates (puts labels on y axis)
+                    xlab("Label") + ylab("Mean difference (95% CI)")  +
+                    theme_gdocs()))
+        
+    })
     
     output$plot <- renderPlotly({
         print(
