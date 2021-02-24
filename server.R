@@ -27,12 +27,14 @@ shinyServer(function(input, output) {
     sliderValues <- reactive({
         df <- data %>%
             mutate(Treatment         = factor(Treatment, levels = c("Baseline", "Usual Care", "Yoga", "Massage"))) %>%
-            filter(`Participant ID` == unique(`Participant ID`)[as.numeric(input$dataset)])
+            filter(`Participant ID` == unique(`Participant ID`)[as.numeric(input$dataset)]) %>%
+            mutate(Impute            = as.numeric(input$impute)) %>%
+            mutate(Final_Steps       = ifelse(Impute == 1, Steps_impute, Steps))
         
         summary <- df %>%
             group_by(Date, Treatment) %>% 
             filter(Treatment != "Baseline") %>%
-            summarise(Steps   = sum(Steps), .groups = 'drop')
+            summarise(Steps   = sum(Final_Steps), .groups = 'drop')
         
         fit <- gls(model       = Steps ~ Treatment, 
                    correlation = corAR1(form=~1),
@@ -52,12 +54,14 @@ shinyServer(function(input, output) {
     fp <- reactive({
         df <- data %>%
             mutate(Treatment         = factor(Treatment, levels = c("Baseline", "Usual Care", "Yoga", "Massage"))) %>%
-            filter(`Participant ID` == unique(`Participant ID`)[as.numeric(input$dataset)])
+            filter(`Participant ID` == unique(`Participant ID`)[as.numeric(input$dataset)]) %>%
+            mutate(Impute            = as.numeric(input$impute)) %>%
+            mutate(Final_Steps       = ifelse(Impute == 1, Steps_impute, Steps))
         
         summary <- df %>%
             group_by(Date, Treatment) %>% 
             filter(Treatment != "Baseline") %>%
-            summarise(Steps   = sum(Steps), .groups = 'drop')
+            summarise(Steps   = sum(Final_Steps), .groups = 'drop')
         
         fit1 <- gls(Steps ~ Treatment, correlation = corAR1(form=~1), data = summary,
                     control = list(singular.ok = TRUE), na.action = na.omit, 
@@ -86,12 +90,14 @@ shinyServer(function(input, output) {
     summ <- reactive({
         df <- data %>%
             mutate(Treatment        = factor(Treatment, levels = c("Baseline", "Usual Care", "Yoga", "Massage"))) %>%
-            filter(`Participant ID` == unique(`Participant ID`)[as.numeric(input$dataset)]) 
+            filter(`Participant ID` == unique(`Participant ID`)[as.numeric(input$dataset)]) %>%
+            mutate(Impute            = as.numeric(input$impute)) %>%
+            mutate(Final_Steps       = ifelse(Impute == 1, Steps_impute, Steps))
         
          df %>%
             group_by(Date, Treatment) %>% 
             filter(Treatment != "Baseline") %>%
-            summarise(Steps   = sum(Steps_impute), 
+            summarise(Steps   = sum(Final_Steps), 
                       HR      = median(`Heart Rate`, na.rm = T),
                       .groups = 'drop') %>%
             mutate(group      = 1)

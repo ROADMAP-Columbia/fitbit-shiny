@@ -49,12 +49,9 @@ shinyUI(fluidPage(
                                     "Patient 19" = "19", 
                                     "Patient 20" = "20")),
             
-            # Copy the line below to make a set of radio buttons
-            radioButtons('impute', label = h5('Use imputed data?'),
-                         choices = list("Yes" = "1", "No" = "0"), 
-                         selected = "0")
-            
-            
+            selectInput('impute', h5('Use imputed steps data?'), 
+                        choices = c("No" = "0",
+                                    "Yes" = "1"))
         ),
 
         # Show a plot of the generated distribution
