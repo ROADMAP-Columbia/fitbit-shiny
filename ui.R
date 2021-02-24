@@ -51,7 +51,11 @@ shinyUI(fluidPage(
             
             selectInput('impute', h5('Use imputed steps data?'), 
                         choices = c("No" = "0",
-                                    "Yes" = "1"))
+                                    "Yes" = "1")), 
+            hr(),
+            radioButtons('format', 'Document format', c('PDF', 'HTML', 'Word'),
+                         inline = TRUE),
+            downloadButton('downloadReport')
         ),
 
         # Show a plot of the generated distribution

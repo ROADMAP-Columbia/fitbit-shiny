@@ -1,0 +1,52 @@
+---
+title: "Patient report"
+output: html_document
+---
+
+#### AR(1) model analysis with treatment effects
+
+```{r, echo = FALSE}
+kable(sliderValues(), row.names = FALSE)
+```
+
+#### Forest plot of treatment comparison
+
+```{r, echo = FALSE, fig.align='center'}
+ggplot(data = fp(), aes(x     = label, 
+                                        y     = mean, 
+                                        ymin  = lower, 
+                                        ymax  = upper)) +
+                    geom_pointrange() + 
+                    geom_hline(yintercept = 0, lty = 2) +  # add a dotted line at x=1 after flip
+                    coord_flip() + # flip coordinates (puts labels on y axis)
+                    xlab("Label") + ylab("Mean difference (95% CI)")  +
+                    theme_gdocs()
+```
+
+#### Number of steps per day
+
+```{r, echo = FALSE, fig.align='center'}
+ggplot(data = summ(), aes(x = Date, y = Steps)) + 
+                    geom_point() +
+                    geom_line(aes(color = Treatment, group = 1)) +
+                    theme_gdocs()
+```
+
+
+#### Distribution of total number of steps per day by treatment
+
+```{r, echo = FALSE, fig.align='center'}
+ggplot(data = summ(), aes(x = Treatment, y = Steps, fill = Treatment)) + 
+                    geom_boxplot() +
+                    theme_gdocs()
+```
+
+
+
+#### Distribution of median heart rate by treatment
+
+```{r, echo = FALSE, fig.align='center'}
+ggplot(data = summ(), aes(x = Treatment, y = HR, fill = Treatment)) + 
+                    geom_boxplot() +
+                    theme_gdocs()
+```
