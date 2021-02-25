@@ -27,6 +27,7 @@ shinyUI(fluidPage(
     # Sidebar with a slider input for number of bins
     sidebarLayout(
         sidebarPanel(
+            
             selectInput('dataset', h5('Choose a patient:'), 
                         choices = c("Patient 1" = "1",
                                     "Patient 2" = "2", 
@@ -52,10 +53,13 @@ shinyUI(fluidPage(
             selectInput('impute', h5('Use imputed steps data?'), 
                         choices = c("No" = "0",
                                     "Yes" = "1")), 
+            
             hr(),
+            
             radioButtons('format', 'Document format', c('PDF', 'HTML', 'Word'),
                          inline = TRUE),
-            downloadButton('downloadReport')
+            
+            downloadButton('downloadReport', label = "Download Report")
         ),
 
         # Show a plot of the generated distribution
