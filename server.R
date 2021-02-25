@@ -129,7 +129,7 @@ shinyServer(function(input, output) {
                     geom_pointrange() + 
                     geom_hline(yintercept = 0, lty = 2) +  # add a dotted line at x=1 after flip
                     coord_flip() + # flip coordinates (puts labels on y axis)
-                    xlab("Label") + ylab("Mean difference (95% CI)")  +
+                    xlab("") + ylab("Mean difference (95% CI)")  +
                     theme_gdocs()))
         
     })
@@ -139,6 +139,7 @@ shinyServer(function(input, output) {
             ggplotly(
                 ggplot(data = summ(), aes(x = Date, y = Steps)) + 
                     geom_point() +
+                    ylab("Total Steps")  +
                     geom_line(aes(color = Treatment, group = 1)) +
                     theme_gdocs()))
         
@@ -149,6 +150,7 @@ shinyServer(function(input, output) {
             ggplotly(
                 ggplot(data = summ(), aes(x = Treatment, y = Steps, fill = Treatment)) + 
                     geom_boxplot() +
+                    ylab("Total Steps (per day)")  +
                     theme_gdocs()))
         
     })
@@ -158,6 +160,7 @@ shinyServer(function(input, output) {
             ggplotly(
                 ggplot(data = summ(), aes(x = Treatment, y = HR, fill = Treatment)) + 
                     geom_boxplot() +
+                    ylab("Median Heart Rate")  +
                     theme_gdocs()))
         
     })

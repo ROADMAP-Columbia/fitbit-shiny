@@ -19,7 +19,7 @@ ggplot(data = fp(), aes(x     = label,
                     geom_pointrange() + 
                     geom_hline(yintercept = 0, lty = 2) +  # add a dotted line at x=1 after flip
                     coord_flip() + # flip coordinates (puts labels on y axis)
-                    xlab("Label") + ylab("Mean difference (95% CI)")  +
+                    xlab("") + ylab("Mean difference (95% CI)")  +
                     theme_gdocs()
 ```
 
@@ -29,6 +29,7 @@ ggplot(data = fp(), aes(x     = label,
 ggplot(data = summ(), aes(x = Date, y = Steps)) + 
                     geom_point() +
                     geom_line(aes(color = Treatment, group = 1)) +
+                    ylab("Total Steps")  +
                     theme_gdocs()
 ```
 
@@ -38,6 +39,7 @@ ggplot(data = summ(), aes(x = Date, y = Steps)) +
 ```{r, echo = FALSE, fig.align='center'}
 ggplot(data = summ(), aes(x = Treatment, y = Steps, fill = Treatment)) + 
                     geom_boxplot() +
+                    ylab("Total Steps (per day)")  +
                     theme_gdocs()
 ```
 
@@ -48,5 +50,6 @@ ggplot(data = summ(), aes(x = Treatment, y = Steps, fill = Treatment)) +
 ```{r, echo = FALSE, fig.align='center'}
 ggplot(data = summ(), aes(x = Treatment, y = HR, fill = Treatment)) + 
                     geom_boxplot() +
+                    ylab("Median Heart Rate")  +
                     theme_gdocs()
 ```
