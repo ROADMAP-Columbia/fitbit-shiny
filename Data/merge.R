@@ -11,5 +11,6 @@ for(i in 1:length(temp)){
 
 
 df <- tibble::as_tibble(data.table::rbindlist(df))
+df$`Repeat Measure` <- NULL
 
 openxlsx::write.xlsx(df, file = "Imputed_Fitbit_by_Minute.xlsx")
