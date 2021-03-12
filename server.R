@@ -74,7 +74,7 @@ shinyServer(function(input, output) {
         summary <- df %>%
             group_by(Date, Treatment) %>% 
             filter(Treatment != "Baseline") %>%
-            summarise(Steps   = sum(Steps), .groups = 'drop')
+            summarise(Steps   = sum(Final_Steps), .groups = 'drop')
         
         fit2 <- gls(Steps ~ Treatment, correlation = corAR1(form=~1), data = summary,
                     control = list(singular.ok = TRUE), na.action = na.omit, 
