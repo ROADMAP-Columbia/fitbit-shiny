@@ -12,5 +12,6 @@ for(i in 1:length(temp)){
 
 df <- tibble::as_tibble(data.table::rbindlist(df))
 df$`Repeat Measure` <- NULL
+df <- df[!is.na(df$`Participant ID`), ]
 
 openxlsx::write.xlsx(df, file = "Imputed_Fitbit_by_Minute.xlsx")
