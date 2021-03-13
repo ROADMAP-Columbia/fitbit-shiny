@@ -82,7 +82,7 @@ shinyServer(function(input, output) {
         
         
         fp <- data.frame(label = c("Yoga vs Usual Care", "Massage vs Usual Care", "Massage vs Yoga"), 
-                         mean  = c(intervals(fit1)$coef[2, 2],  intervals(fit1)$coef[3, 2],  intervals(fit2)$coef[2, 2]), 
+                         mean  = c(intervals(fit1)$coef[2, 2], intervals(fit1)$coef[3, 2], intervals(fit2)$coef[2, 2]), 
                          lower = c(intervals(fit1)$coef[2, 1], intervals(fit1)$coef[3, 1], intervals(fit2)$coef[2, 1]), 
                          upper = c(intervals(fit1)$coef[2, 3], intervals(fit1)$coef[3, 3], intervals(fit2)$coef[2, 3]))
         
