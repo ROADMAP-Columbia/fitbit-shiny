@@ -20,7 +20,8 @@ library(plotly)
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
-    theme = bs_theme(version = 4, bootswatch = "minty"),
+    theme = bs_theme(fg = "#00008B", bootswatch = "sketchy", 
+                     bg = "#FFFFFF"),
     # Application title
     titlePanel("N-of-1 Trial Fitbit Data"),
 
